@@ -72,9 +72,9 @@ function player:update(dt, st)
   if self.spawnBullet == true then
     LOG.debug("spawn bullet @ " .. tostring(self.pos))
     local bo = M.vec2From(self.pos)
-    local offset = M.vec2(10,0)
-    bo:add(offset)
+    local offset = M.vec2(self.height,0)
     offset:rotate(self.theta)
+    bo:add(offset)
     local bullet = setmetatable({
       pos = bo,
       angle = self.theta,
