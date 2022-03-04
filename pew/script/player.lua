@@ -1,6 +1,29 @@
 local M = require("ps2math")
 local D2D = require("draw2d")
 
+local playerBullet = {
+  pos = M.vec2(0,0),
+  speed = 100,
+  width = 2,
+  height = 2,
+  angle = 0,
+  colour = {1,1,1}
+}
+
+function playerBullet:draw() 
+  D2D:setColour(0xff * self.colour[1],
+    0xff * self.colour[2],
+    0xff * self.colour[3],
+    0x80)
+  D2D:rect(self.pos.x, self.pos.y, self.width, self.height)
+end
+
+function playerBullet:update(dt)
+  local fwd = M.vec2(self.speed*dt,0)
+  fwd:rotate(self.angle)
+  self.pos:add(fwd)
+end
+
 local player = {
   pos = M.vec2(0,0),
   speed = 85.2,
@@ -34,7 +57,7 @@ function player.new(x, y)
   return setmetatable({pos = M.vec2(x, y)}, {__index = player})
 end
 
-function player:update(dt)
+function player:update(dt, st)
   local rx = PAD.axis(PAD.axisRightX)
   local ry = PAD.axis(PAD.axisRightY)
   local rv = M.vec2(rx, ry)
@@ -44,8 +67,29 @@ function player:update(dt)
 
   local dir = M.vec2(PAD.axis(PAD.axisLeftX), PAD.axis(PAD.axisLeftY))
   dir:scale(self.speed * dt)
-  LOG.debug("moving at " .. tostring(dir))
   self.pos:add(dir)
+
+  if self.spawnBullet == true then
+    LOG.debug("spawn bullet @ " .. tostring(self.pos))
+    local bo = M.vec2From(self.pos)
+    local offset = M.vec2(10,0)
+    bo:add(offset)
+    offset:rotate(self.theta)
+    local bullet = setmetatable({
+      pos = bo,
+      angle = self.theta,
+    }, { __index = playerBullet })
+    st:spawn(bullet)
+    self.spawnBullet = false
+  end
 end
+
+function player:padPress(b)
+  if b == PAD.X then
+    self.spawnBullet = true
+  end
+end
+
+function player:padRelease(b) end
 
 return player
