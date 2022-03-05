@@ -1,6 +1,8 @@
 local M = require("ps2math")
 local D2D = require("draw2d")
 
+local PX = 30
+
 local playerBullet = {
   pos = M.vec2(0,0),
   speed = 100,
@@ -22,6 +24,8 @@ function playerBullet:update(dt)
   local fwd = M.vec2(self.speed*dt,0)
   fwd:rotate(self.angle)
   self.pos:add(fwd)
+  if self.pos.x < -20 or self.pos.x > 670 or self.pos.y < -20
+    or self.pos.y > 470 then return false end
 end
 
 local player = {
@@ -68,6 +72,17 @@ function player:update(dt, st)
   local dir = M.vec2(PAD.axis(PAD.axisLeftX), PAD.axis(PAD.axisLeftY))
   dir:scale(self.speed * dt)
   self.pos:add(dir)
+
+  if self.pos.x < -PX then self.pos.x = self.pos.x + st.width
+  elseif self.pos.x > st.width - PX then self.pos.x = self.pos.x - st.width
+  end
+
+  if self.pos.y < -PX then self.pos.y = self.pos.y + st.height
+  elseif self.pos.y > st.height - PX then self.pos.y = self.pos.y - st.height
+  end
+
+
+
 
   if self.spawnBullet == true then
     LOG.debug("spawn bullet @ " .. tostring(self.pos))

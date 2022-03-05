@@ -7,6 +7,10 @@ local player = require("player")
 local game = State({
   entities = {},
   player = nil,
+  viewWidth = 640,
+  viewHeight = 448,
+  width = 640 + 60,
+  height = 448 + 60,
 })
 
 function game:enter()
@@ -29,8 +33,15 @@ function game:draw()
 end
 
 function game:update(dt)
-  for _, e in ipairs(self.entities) do
-    e:update(dt, self)
+  local killList = {}
+  for i, e in ipairs(self.entities) do
+    if e:update(dt, self) == false then
+      table.insert(killList, i)
+    end
+  end
+
+  for _, i in ipairs(killList) do
+    table.remove(self.entities, i)
   end
 end
 

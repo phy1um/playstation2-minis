@@ -31,6 +31,7 @@ end
 function PS2PROG.start()
   PS2PROG.logLevel(LOG.debugLevel)
   DMA.init(DMA.GIF)
+  GS.setOutput(640, 448, GS.INTERLACED, GS.NTSC) 
   local fb1 = VRAM.mem:framebuffer(640, 448, GS.PSM32, 1024)
   local fb2 = VRAM.mem:framebuffer(640, 448, GS.PSM32, 1024)
   local zb =  VRAM.mem:framebuffer(640, 448, GS.PSMZ24, 1024)
