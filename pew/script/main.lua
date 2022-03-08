@@ -38,7 +38,7 @@ function PS2PROG.start()
   GS.setBuffers(fb1, fb2, zb)
   D2D:screenDimensions(640, 448)
 
-  D2D:clearColour(0x2b, 0x2b, 0x2b)
+  D2D:clearColour(0x9, 0x9, 0x1D)
 
   local drawbuffer = RM.alloc(1024 * 5)
   D2D:bindBuffer(drawbuffer)
