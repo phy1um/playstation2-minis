@@ -65,7 +65,7 @@ function player:update(dt, st)
   local rx = PAD.axis(PAD.axisRightX)
   local ry = PAD.axis(PAD.axisRightY)
   local rv = M.vec2(rx, ry)
-  if rv:length() > 0.2 then
+  if rv:length() > 0.8 then
     self.theta = math.atan(ry, rx)
   end
 
@@ -100,7 +100,7 @@ function player:update(dt, st)
 end
 
 function player:padPress(b)
-  if b == PAD.X then
+  if b == PAD.R1 then
     self.spawnBullet = true
   end
 end
