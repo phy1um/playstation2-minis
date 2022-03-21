@@ -44,4 +44,4 @@ assets:
 
 .PHONY: lualint
 lualint:
-	luac5.3 -p script/*.lua
+	luac5.3 -p $(shell find script -type f -name "*.lua")
