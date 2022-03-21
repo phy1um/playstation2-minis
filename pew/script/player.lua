@@ -9,7 +9,7 @@ local playerBullet = {
   width = 2,
   height = 2,
   angle = 0,
-  colour = {1,1,1}
+  colour = {1,1,1},
 }
 
 function playerBullet:draw() 
@@ -35,6 +35,8 @@ local player = {
   height = 40,
   theta = 0,
   transform = M.mat3(),
+  wrap = true,
+  name = "PLAYER",
 }
 
 function player:draw()
@@ -73,6 +75,7 @@ function player:update(dt, st)
   dir:scale(self.speed * dt)
   self.pos:add(dir)
 
+  --[[
   if self.pos.x < -PX then self.pos.x = self.pos.x + st.width
   elseif self.pos.x > st.width - PX then self.pos.x = self.pos.x - st.width
   end
@@ -80,9 +83,7 @@ function player:update(dt, st)
   if self.pos.y < -PX then self.pos.y = self.pos.y + st.height
   elseif self.pos.y > st.height - PX then self.pos.y = self.pos.y - st.height
   end
-
-
-
+  --]]
 
   if self.spawnBullet == true then
     LOG.debug("spawn bullet @ " .. tostring(self.pos))
