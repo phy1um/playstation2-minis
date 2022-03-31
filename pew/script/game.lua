@@ -1,6 +1,7 @@
 
 local D2D = require("draw2d")
 local State = require("state")
+local SL = require("slotlist")
 
 local player = require("entity.player")
 local rock = require("entity.rock")
@@ -9,8 +10,8 @@ local gameManager = require("entity.gamemgr")
 local PX = 30
 
 local game = State({
-  entities = {},
-  aabbs = {},
+  entities = SL.new(50),
+  aabbs = SL.new(50),
   player = nil,
   viewWidth = 640,
   viewHeight = 448,
@@ -38,29 +39,29 @@ function game:enter()
 end
 
 function game:spawn(e)
-  table.insert(self.entities, e)
+  self.entities:push(e, 1)
   LOG.debug("spawn " .. e.name .. " @ " .. tostring(e.pos))
   e:onSpawn(self)
 end
 
 function game:addArea(b)
-  table.insert(self.aabbs, b)
+  self.aabbs:push(b, 1)
 end
 
 function game:draw()
-  for _, e in ipairs(self.entities) do
+  self.entities:each(function(e)
     if e.pos.x > -30 and e.pos.y > -30 and
       e.pos.x < 670 and e.pos.y < 480 then
-      e:draw()
+        e:draw()
     end
-  end
+  end)
 end
 
 function game:update(dt)
-  local killList = {}
-  for i, e in ipairs(self.entities) do
+
+  self.entities:each(function(e, state, i)
     if e:update(dt, self) == false then
-      table.insert(killList, i)
+      self.entities:setState(i, 0)
       e:onDestroy(self)
     end
     if e.pos.x < -PX or e.pos.y < -PX or 
@@ -68,36 +69,21 @@ function game:update(dt)
         if e.wrap == true then
           doWrap(e, self)
         else
-          table.insert(killList, i) 
+          self.entities:setState(i, 0)
+          e:onDestroy(self)
         end
     end
-  end
+  end)
 
-  local aabbKillList = {}
-  for i, aabb in ipairs(self.aabbs) do
+  self.aabbs:each(function(aabb, state, i)
     if aabb.active == false then
-      table.insert(aabbKillList, i)
+      self.aabbs:setState(i, 0)
     else
-      for _, e in ipairs(self.entities) do
+      self.entities:each(function(e)
         e:collide(aabb)
-      end
+      end)
     end
-  end
-
-  for _, i in ipairs(killList) do
-    table.remove(self.entities, i)
-    for j=i+1,#killList,1 do
-      if killList[j] > killList[i]  then killList[i] = killList[i] - 1 end
-    end
-  end
-
-  for _, i in ipairs(aabbKillList) do
-    table.remove(self.aabbs, i)
-    for j=i+1,#aabbKillList,1 do
-      if aabbKillList[j] > aabbKillList[i]  then aabbKillList[i] = aabbKillList[i] - 1 end
-    end
-
-  end
+  end)
 end
 
 function game:padPress(b)

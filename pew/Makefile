@@ -1,5 +1,5 @@
 
-ENGINE_HASH=d379a9b00313918c3ab839d0ab6c3cfc1f6e20a9
+ENGINE_HASH=b1044ace630007731e96e4c3de7cb4a1cd021157
 DOIN=$(cd engine && make )
 
 .PHONY: get-engine
@@ -35,7 +35,6 @@ resetps2:
 .PHONY: scripts
 scripts:
 	cp -r script/* engine/script/
-	cp main.lua engine/
 
 .PHONY: assets
 assets:
