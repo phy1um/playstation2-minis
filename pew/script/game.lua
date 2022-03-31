@@ -9,6 +9,8 @@ local gameManager = require("entity.gamemgr")
 
 local PX = 30
 
+local debugDrawFlag = false
+
 local game = State({
   entities = SL.new(50),
   aabbs = SL.new(50),
@@ -27,8 +29,6 @@ function doWrap(e, st)
   if e.pos.y < -PX then e.pos.y = e.pos.y + st.height
   elseif e.pos.y > st.height - PX then e.pos.y = e.pos.y - st.height
   end
-
-  --LOG.info("wrap " .. e.name)
 end
 
 function game:enter()
@@ -55,6 +55,11 @@ function game:draw()
         e:draw()
     end
   end)
+
+  if debugDrawFlag == false then 
+    return 
+  end
+
   self.aabbs:each(function(a)
     D2D:setColour(0xff, 0, 0, 0x20)
     D2D:rect(a.pos.x, a.pos.y, a.bound.x, a.bound.y)
@@ -91,6 +96,9 @@ function game:update(dt)
 end
 
 function game:padPress(b)
+  if b == PAD.SELECT then
+    debugDrawFlag = not debugDrawFlag
+  end
   self.player:padPress(b)
 end
 

@@ -13,6 +13,7 @@ function initPadState()
   padHeldState[PAD.UP] = false
   padHeldState[PAD.DOWN] = false
   padHeldState[PAD.R1] = false
+  padHeldState[PAD.SELECT] = false
 end
 
 function updatePadState(st)
