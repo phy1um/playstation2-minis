@@ -55,6 +55,10 @@ function game:draw()
         e:draw()
     end
   end)
+  self.aabbs:each(function(a)
+    D2D:setColour(0xff, 0, 0, 0x20)
+    D2D:rect(a.pos.x, a.pos.y, a.bound.x, a.bound.y)
+  end)
 end
 
 function game:update(dt)

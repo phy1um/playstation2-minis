@@ -37,12 +37,16 @@ function rock:onSpawn(st)
   st:addArea(self.aabb)
 end
 
+function rock:onDestroy()
+  self.aabb.active = false
+end
+
 function rock:update(dt)
+  self.aabb.pos:copy(self.pos)
   if self.kill == true then return false end
   local delta = M.vec2From(self.dir)
   delta:scale(self.speed)
   self.pos:add(delta)
-  self.aabb.pos:add(delta)
 end
 
 function rock:draw()
