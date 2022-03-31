@@ -1,6 +1,8 @@
 local M = require("ps2math")
 local rock = require("entity.rock")
 local entity = require("entity.entity")
+local T = require("text")
+local D2D = require("draw2d")
 
 local D_RIGHT = 0
 local D_TOP = 1
@@ -12,10 +14,19 @@ local mgr = entity.define({
   acc = 0,
   lastDir = 0,
   name = "GAMEMGR",
+  score = 1000,
 })
 
 function mgr.new()
   return setmetatable({}, {__index = mgr})
+end
+
+function mgr:makeRock(x, y)
+  local out = rock.new(x, y)
+  rock.cb = function()
+    self.score = self.score + 100
+  end
+  return out
 end
 
 function mgr:update(dt, state)
@@ -29,21 +40,26 @@ function mgr:update(dt, state)
     if d == D_RIGHT then
       local x = 660
       local y = (math.random() * 450) + 30
-      state:spawn(rock.new(x, y)) 
+      state:spawn(self:makeRock(x, y))
     elseif d == D_LEFT then
       local x = -20
       local y = (math.random() * 450) + 30
-      state:spawn(rock.new(x, y)) 
+      state:spawn(self:makeRock(x, y))
     elseif d == D_TOP then
       local y = -20
       local x = (math.random() * 610) + 30
-      state:spawn(rock.new(x,y))
+      state:spawn(self:makeRock(x, y))
     elseif d == D_BTM then
       local y = 468
       local x = (math.random() * 610) + 30
-      state:spawn(rock.new(x,y))
+      state:spawn(self:makeRock(x, y))
     end
   end
+end
+
+function mgr:draw()
+  D2D:setColour(0xff, 0xff, 0xff, 0x80)
+  T.printLines(10, 10, "Score: " .. self.score)
 end
 
 return mgr

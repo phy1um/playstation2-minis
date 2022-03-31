@@ -1,6 +1,7 @@
 local D2D = require("draw2d")
 local VRAM = require("vram")
 local game = require("game")
+local T = require("text")
 
 local state = game
 
@@ -32,11 +33,15 @@ end
 
 function PS2PROG.start()
   PS2PROG.logLevel(LOG.debugLevel)
+
+  T.font = D2D.loadTexture("host:bigfont.tga")
+
   DMA.init(DMA.GIF)
   GS.setOutput(640, 448, GS.INTERLACED, GS.NTSC) 
-  local fb1 = VRAM.mem:framebuffer(640, 448, GS.PSM32, 1024)
-  local fb2 = VRAM.mem:framebuffer(640, 448, GS.PSM32, 1024)
-  local zb =  VRAM.mem:framebuffer(640, 448, GS.PSMZ24, 1024)
+
+  local fb1 = VRAM.mem:framebuffer(640, 448, GS.PSM32, 256)
+  local fb2 = VRAM.mem:framebuffer(640, 448, GS.PSM32, 256)
+  local zb =  VRAM.mem:framebuffer(640, 448, GS.PSMZ24, 256)
   GS.setBuffers(fb1, fb2, zb)
   D2D:screenDimensions(640, 448)
 
@@ -44,15 +49,26 @@ function PS2PROG.start()
 
   local drawbuffer = RM.alloc(1024 * 5)
   D2D:bindBuffer(drawbuffer)
+
+
+  local vr = VRAM.slice(VRAM.mem.head)
+  vr:texture(T.font)
    
   state:enter()
 
   initPadState()
 end
 
+local fontUploaded = false
+
 function PS2PROG.frame()
   updatePadState(state)
   D2D:frameStart()
+  if fontUploaded ~= true then
+    D2D:uploadTexture(T.font)
+    T.font.resident = true
+    fontUploaded = true
+  end
   state:draw()
   state:update(1/30)
   D2D:frameEnd()

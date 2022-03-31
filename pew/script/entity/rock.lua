@@ -39,6 +39,9 @@ end
 
 function rock:onDestroy()
   self.aabb.active = false
+  if self.cb then
+    self.cb()
+  end
 end
 
 function rock:update(dt)
