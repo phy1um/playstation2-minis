@@ -44,3 +44,11 @@ assets:
 .PHONY: lualint
 lualint:
 	luac5.3 -p $(shell find script -type f -name "*.lua")
+
+.PHONY: package
+package:
+	mkdir pew
+	cp -r engine/dist/* pew
+	7z a pew.zip pew
+	rm -rf pew/
+

@@ -3,6 +3,7 @@ local D2D = require("draw2d")
 local M = require("ps2math")
 local entity = require("entity.entity")
 local AABB = require("aabb")
+local A = require "assets"
 
 local CX = 320
 local CY = 224
@@ -53,8 +54,8 @@ function rock:update(dt)
 end
 
 function rock:draw()
-  D2D:setColour(0xff, 0xff, 0, 0x80)
-  D2D:rect(self.pos.x, self.pos.y, 20, 20)
+  D2D:setColour(0xff, 0xff, 0xff, 0x80)
+  D2D:sprite(A.rock, self.pos.x-5, self.pos.y-5, 30, 30, 0, 0, 1, 1)
 end
 
 function rock:collide(aabb)

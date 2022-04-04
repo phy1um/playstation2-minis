@@ -2,6 +2,7 @@ local D2D = require("draw2d")
 local VRAM = require("vram")
 local game = require("game")
 local T = require("text")
+local A = require("assets")
 
 local state = game
 
@@ -53,6 +54,7 @@ function PS2PROG.start()
 
   local vr = VRAM.slice(VRAM.mem.head)
   vr:texture(T.font)
+  A:loadTex(vr)
    
   state:enter()
 
@@ -69,6 +71,7 @@ function PS2PROG.frame()
     T.font.resident = true
     fontUploaded = true
   end
+  A:toVram()
   state:draw()
   state:update(1/30)
   D2D:frameEnd()
