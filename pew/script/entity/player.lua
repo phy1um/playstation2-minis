@@ -3,6 +3,7 @@ local D2D = require("draw2d")
 local playerBullet = require("entity.playerbullet")
 local entity = require("entity.entity")
 local AABB = require("aabb")
+local A = require "assets"
 
 local PX = 30
 
@@ -35,7 +36,10 @@ function player:draw()
   self.transform:apply(p2)
   self.transform:apply(p3)
 
-  D2D:triangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)
+  D2D:textri(A.player,
+    p1.x, p1.y, 0, 0.5, 
+    p2.x, p2.y, 0, 0.5,
+    p3.x, p3.y, 1, 0)
 end
 
 function player.new(x, y)

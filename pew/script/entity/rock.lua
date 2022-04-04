@@ -18,6 +18,7 @@ local rock = entity.define({
   scale = 1,
   wrap = true,
   name = "ROCK",
+  transform = M.mat3(),
 })
 
 function rock.new(x, y)
@@ -51,11 +52,37 @@ function rock:update(dt)
   local delta = M.vec2From(self.dir)
   delta:scale(self.speed)
   self.pos:add(delta)
+  self.theta = self.theta + 0.8 * dt
 end
 
 function rock:draw()
+  self.transform[0] = math.cos(self.theta) 
+  self.transform[1] = -1 * math.sin(self.theta) 
+  self.transform[2] = self.pos.x + 7.5
+  self.transform[3] = math.sin(self.theta) 
+  self.transform[4] = math.cos(self.theta) 
+  self.transform[5] = self.pos.y + 7.5
+
+  local p1 = M.vec3(-15, -15, 1)
+  local p2 = M.vec3(-15, 15, 1)
+  local p3 = M.vec3(15, 15, 1)
+  local p4 = M.vec3(15, -15, 1)
+
+  self.transform:apply(p1)
+  self.transform:apply(p2)
+  self.transform:apply(p3)
+  self.transform:apply(p4)
+
   D2D:setColour(0xff, 0xff, 0xff, 0x80)
-  D2D:sprite(A.rock, self.pos.x-5, self.pos.y-5, 30, 30, 0, 0, 1, 1)
+  D2D:textri(A.rock, 
+    p1.x, p1.y, 0, 0,
+    p2.x, p2.y, 0, 1,
+    p3.x, p3.y, 1, 1)
+  D2D:textri(A.rock, 
+    p3.x, p3.y, 1, 1,
+    p4.x, p4.y, 1, 0,
+    p1.x, p1.y, 0, 0)
+
 end
 
 function rock:collide(aabb)
