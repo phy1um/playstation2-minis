@@ -5,14 +5,17 @@ local SL = require("slotlist")
 
 local player = require("entity.player")
 local rock = require("entity.rock")
+local planet = require("entity.planet")
+local stars = require("entity.star")
 local gameManager = require("entity.gamemgr")
 
 local PX = 30
 
-local debugDrawFlag = false
+debugDrawFlag = false
 
 local game = State({
   entities = SL.new(50),
+  bgs = SL.new(50),
   aabbs = SL.new(50),
   player = nil,
   viewWidth = 640,
@@ -31,10 +34,24 @@ function doWrap(e, st)
   end
 end
 
+local offset = 30
+local gap = 115
+local N = 6
+function game:decorate()
+  for i=1,5,1 do
+    local n = math.random(N) - 1
+    local xx = offset + gap*n + math.random()*20 - 10
+    local yy = math.random() * 440
+    self.bgs:push(planet.new(xx, yy, "planetB"), 1)
+  end
+end
+
 function game:enter()
   local p = player.new(30, 40)
   self.player = p
   self:spawn(p)
+  self:decorate()
+  self.bgstars = stars.new(-20, -20, 660, 500, 100)
   self:spawn(gameManager.new())
 end
 
@@ -49,6 +66,10 @@ function game:addArea(b)
 end
 
 function game:draw()
+  self.bgstars:draw()
+  self.bgs:each(function(e)
+    e:draw()
+  end)
   self.entities:each(function(e)
     if e.pos.x > -30 and e.pos.y > -30 and
       e.pos.x < 670 and e.pos.y < 480 then
@@ -67,7 +88,7 @@ function game:draw()
 end
 
 function game:update(dt)
-
+  self.bgstars:update(dt)
   self.entities:each(function(e, state, i)
     if e:update(dt, self) == false then
       self.entities:setState(i, 0)

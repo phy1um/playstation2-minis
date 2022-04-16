@@ -1,5 +1,5 @@
 
-ENGINE_HASH=b1044ace630007731e96e4c3de7cb4a1cd021157
+ENGINE_HASH=73487f675db89a0e5636bfe3d23602365d834301
 DOIN=$(cd engine && make )
 
 .PHONY: get-engine
@@ -52,4 +52,8 @@ package:
 	7z a pew.zip pew
 	rm -rf pew/
 
+
+.PHONY: grab
+grab:
+	cp ~/workspace/playstation2/ps2-homebrew-engine/dist/test.elf engine/dist/test.elf
 

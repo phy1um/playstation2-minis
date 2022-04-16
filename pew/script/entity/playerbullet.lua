@@ -5,11 +5,11 @@ local entity = require("entity.entity")
 
 local playerBullet = entity.define({
   pos = M.vec2(0,0),
-  speed = 100,
+  speed = 200,
   width = 2,
   height = 2,
   angle = 0,
-  colour = {1,1,1},
+  colour = {1,1,0},
   alive = true,
   name = "PBULLET",
 })

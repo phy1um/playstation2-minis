@@ -2,6 +2,7 @@ local M = require "ps2math"
 local D2D = require "draw2d"
 local entity = require "entity.entity"
 local SL = require "slotlist"
+local A = require "assets"
 
 local stars = entity.define({
   pos = M.vec2(0,0),
@@ -16,7 +17,7 @@ function stars:add()
   local s = {
     x = xx,
     y = yy,
-    d = math.random(),
+    d = math.random() * 7,
     p = math.random() * 2 + 4,
     m = math.min(math.random() + 0.3, 1)
   }
@@ -42,7 +43,8 @@ end
 function draw(star)
   local brightness = math.max(0, math.min(1, math.sin(star.d) + star.m)) * 0.1 + 0.4
   D2D:setColour(math.floor(brightness*0x80), math.floor(brightness*0x80), math.floor(brightness*0x80), 0x80)
-  D2D:rect(star.x, star.y, 3.1, 3.1)
+  D2D:sprite(A.sprites, star.x, star.y, 3.1, 3.1,
+    0, 0.25, 0.125, 0.375)
 end
 
 function stars.new(x, y, w, h, n)

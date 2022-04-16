@@ -33,7 +33,7 @@ function updatePadState(st)
 end
 
 function PS2PROG.start()
-  PS2PROG.logLevel(LOG.debugLevel)
+  PS2PROG.logLevel(LOG.infoLevel)
 
   T.font = D2D.loadTexture("host:bigfont.tga")
 
@@ -46,7 +46,7 @@ function PS2PROG.start()
   GS.setBuffers(fb1, fb2, zb)
   D2D:screenDimensions(640, 448)
 
-  D2D:clearColour(0x9, 0x9, 0x1D)
+  D2D:clearColour(0x2, 0x2, 0x4)
 
   local drawbuffer = RM.alloc(1024 * 5)
   D2D:bindBuffer(drawbuffer)

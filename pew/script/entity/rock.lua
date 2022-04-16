@@ -73,15 +73,15 @@ function rock:draw()
   self.transform:apply(p3)
   self.transform:apply(p4)
 
-  D2D:setColour(0xff, 0xff, 0xff, 0x80)
-  D2D:textri(A.rock, 
-    p1.x, p1.y, 0, 0,
-    p2.x, p2.y, 0, 1,
-    p3.x, p3.y, 1, 1)
-  D2D:textri(A.rock, 
-    p3.x, p3.y, 1, 1,
-    p4.x, p4.y, 1, 0,
-    p1.x, p1.y, 0, 0)
+  D2D:setColour(0x60, 0x55, 0x55, 0x80)
+  D2D:textri(A.sprites, 
+    p1.x, p1.y, A.rockST[1], A.rockST[3],
+    p2.x, p2.y, A.rockST[1], A.rockST[4],
+    p3.x, p3.y, A.rockST[2], A.rockST[4])
+  D2D:textri(A.sprites, 
+    p3.x, p3.y, A.rockST[2], A.rockST[4],
+    p4.x, p4.y, A.rockST[2], A.rockST[3],
+    p1.x, p1.y, A.rockST[1], A.rockST[3])
 
 end
 

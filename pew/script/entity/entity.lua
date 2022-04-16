@@ -11,6 +11,7 @@ function entity:draw() end
 function entity:update() end
 
 function entity.define(t)
+  if t.name == nil then t.name = "UN-NAMED" end
   LOG.info("DEFINE " .. t.name)
   for k, v in pairs(entity) do
     LOG.info("DEFINE: test " .. k .. " in " .. tostring(t[k]))

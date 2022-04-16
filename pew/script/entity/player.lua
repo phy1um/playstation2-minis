@@ -20,11 +20,13 @@ local player = entity.define({
 })
 
 function player:draw()
-  D2D:setColour(0xff, 0x0, 0x0, 0x80)
+  D2D:setColour(0x60, 0x60, 0x60, 0x80)
 
-  local p1 = M.vec3(- self.height/2, - self.width/2, 1)
-  local p2 = M.vec3(- self.height/2, self.width/2, 1)
-  local p3 = M.vec3(self.height/2, 0, 1)
+  local p1 = M.vec3(-15,-15,1)
+  local p2 = M.vec3(15,-15,1)
+  local p3 = M.vec3(-15,15,1)
+  local p4 = M.vec3(15,15,1)
+
   self.transform[0] = math.cos(self.theta) 
   self.transform[1] = -1 * math.sin(self.theta) 
   self.transform[2] = self.pos.x
@@ -35,11 +37,24 @@ function player:draw()
   self.transform:apply(p1)
   self.transform:apply(p2)
   self.transform:apply(p3)
+  self.transform:apply(p4)
 
-  D2D:textri(A.player,
-    p1.x, p1.y, 0, 0.5, 
-    p2.x, p2.y, 0, 0.5,
-    p3.x, p3.y, 1, 0)
+  D2D:textri(A.sprites,
+    p1.x, p1.y, A.playerST[1], A.playerST[3],
+    p2.x, p2.y, A.playerST[2], A.playerST[3],
+    p3.x, p3.y, A.playerST[1], A.playerST[4])
+  D2D:textri(A.sprites,
+    p4.x, p4.y, A.playerST[2], A.playerST[4],
+    p2.x, p2.y, A.playerST[2], A.playerST[3],
+    p3.x, p3.y, A.playerST[1], A.playerST[4])
+
+  if debugDrawFlag == false then return end
+
+  D2D:setColour(0xff, 0xff, 0x0, 0x20)
+  local m = M.vec2(30,0)
+  m:rotate(self.theta)
+  m:add(self.pos)
+  D2D:rect(m.x - 3, m.y - 3, 6, 6)
 end
 
 function player.new(x, y)
@@ -63,7 +78,7 @@ function player:update(dt, st)
 
   if self.spawnBullet == true then
     local bo = M.vec2From(self.pos)
-    local offset = M.vec2(self.height,0)
+    local offset = M.vec2(5,0)
     offset:rotate(self.theta)
     bo:add(offset)
     local bullet = setmetatable({
