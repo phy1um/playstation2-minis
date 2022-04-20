@@ -1,10 +1,14 @@
 
 local D2D = require("draw2d")
 local text = {
-  font = nil
+  texture = nil,
+  charWidth = 8,
+  charHeight = 14,
+  charS = 0.03125,
+  charT = 0.25
 }
 
-function getCharacterIndex(i)
+local function getCharacterIndex(i)
   if i >= 0 and i <= 32 then
     return i+96
   elseif i >= 33 and i <= 126 then
@@ -14,24 +18,31 @@ function getCharacterIndex(i)
   end
 end
 
-local CHAR_WIDTH_S = 0.03125
-local CHAR_HEIGHT_T = 0.25
-
-function drawString(line, x, y)
+function text:drawString(line, x, y)
   for i=1,#line,1 do
     local ci = getCharacterIndex(string.byte(line, i))
-    local ts = (ci % 32) * CHAR_WIDTH_S
-    local tt = math.floor(ci/32) * CHAR_HEIGHT_T
-    D2D:sprite(text.font, x+(8*i), y, 8, 16, ts, tt, 
-      ts + CHAR_WIDTH_S, tt + CHAR_HEIGHT_T)
+    local ts = (ci % 32) * self.charS
+    local tt = math.floor(ci/32) * self.charT
+    D2D:sprite(self.texture, x+(self.charWidth*i), y, self.charWidth, self.charHeight, ts, tt, 
+      ts + self.charS, tt + self.charT)
   end
 end
 
-function text.printLines(x, y, ...)
+function text:printLines(x, y, ...)
   for i, l in ipairs({...}) do
-    drawString(l, x, y + ((i-1)*16))
+    self:drawString(l, x, y + ((i-1)*self.charHeight))
   end
 end
 
+function text.new(texture, charWidth, charHeight)
+  return setmetatable({
+    texture = texture,
+    charWidth = charWidth,
+    charHeight = charHeight,
+    charS = charWidth / texture.width,
+    charT = charHeight / texture.height,
+    resident = false,
+  }, { __index = text })
+end
 
 return text
