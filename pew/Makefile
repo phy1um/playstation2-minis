@@ -35,6 +35,7 @@ resetps2:
 .PHONY: scripts
 scripts:
 	cp -r script/* engine/script/
+	make -C engine scripts
 
 .PHONY: assets
 assets:

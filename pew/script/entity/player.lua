@@ -9,7 +9,9 @@ local PX = 30
 
 local player = entity.define({
   pos = M.vec2(0,0),
-  speed = 85.2,
+  velocity = M.vec2(0,0),
+  maxVelocity = 3, -- NOT IN PIXELS/SEC
+  accel = 4,
   width = 30,
   height = 40,
   theta = 0,
@@ -72,9 +74,13 @@ function player:update(dt, st)
   end
 
   local dir = M.vec2(PAD.axis(PAD.axisLeftX), PAD.axis(PAD.axisLeftY))
-  dir:scale(self.speed * dt)
-  self.pos:add(dir)
-  self.aabb.pos:add(dir)
+  dir:scale(self.accel * dt)
+  self.velocity:add(dir)
+  if self.velocity:length() > self.maxVelocity then
+    local c = self.maxVelocity/self.velocity:length()  
+    self.velocity:scale(c)
+  end
+  self.pos:add(self.velocity)
 
   if self.spawnBullet == true then
     local bo = M.vec2From(self.pos)

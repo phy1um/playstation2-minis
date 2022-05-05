@@ -119,6 +119,7 @@ end
 function game:padPress(b)
   if b == PAD.SELECT then
     debugDrawFlag = not debugDrawFlag
+    reload("entity.player")
   end
   self.player:padPress(b)
 end
