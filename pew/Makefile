@@ -1,5 +1,5 @@
 
-ENGINE_HASH=c649de1cc69ccc64a7e2126176dd3172bd27b9d7
+ENGINE_HASH=97f9e28988c7db304b27210f126e610b553ae461
 DOIN=$(cd engine && make )
 
 .PHONY: get-engine

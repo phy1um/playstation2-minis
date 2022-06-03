@@ -19,7 +19,7 @@ function planet.new(x, y, kind)
     uvs = kindToUvs(kind),
     v = kindToSpeed(kind),
     col = col(),
-    a = kindToAlpha(kind),
+    a = 0x80,
   }, {__index = planet})
 end
 
@@ -63,7 +63,7 @@ function kindToAlpha(k)
   if k == "cloud" then
     return 0x10
   else
-    return 0x75
+    return 0x80
   end
 end
 
