@@ -1,7 +1,7 @@
 local M = require("ps2math")
 local rock = require("entity.rock")
 local entity = require("entity.entity")
-local T = require("text")
+local A = require("assets")
 local D2D = require("draw2d")
 
 local D_RIGHT = 0
@@ -17,7 +17,7 @@ local mgr = entity.define({
   acc = 0,
   lastDir = 0,
   name = "GAMEMGR",
-  score = 1000,
+  score = 0,
 })
 
 function mgr.new()
@@ -62,8 +62,10 @@ function mgr:update(dt, state)
 end
 
 function mgr:draw()
-  D2D:setColour(0xff, 0xff, 0xff, 0x80)
-  T.printLines(10, 10, "Score: " .. self.score)
+  D2D:setColour(0x80, 0x80, 0x80, 0x80)
+  --T.printLines(10, 10, "Score: " .. self.score)
+  A.font:printLines(10, 10, "Score: " .. string.format("%06s", self.score))
 end
+
 
 return mgr

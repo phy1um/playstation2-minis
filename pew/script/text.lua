@@ -21,8 +21,8 @@ end
 function text:drawString(line, x, y)
   for i=1,#line,1 do
     local ci = getCharacterIndex(string.byte(line, i))
-    local ts = (ci % 32) * self.charS
-    local tt = math.floor(ci/32) * self.charT
+    local ts = (ci % self.charsPerLine) * self.charS
+    local tt = math.floor(ci/self.charsPerLine) * self.charT
     D2D:sprite(self.texture, x+(self.charWidth*i), y, self.charWidth, self.charHeight, ts, tt, 
       ts + self.charS, tt + self.charT)
   end
@@ -41,6 +41,7 @@ function text.new(texture, charWidth, charHeight)
     charHeight = charHeight,
     charS = charWidth / texture.width,
     charT = charHeight / texture.height,
+    charsPerLine = 32,
     resident = false,
   }, { __index = text })
 end
