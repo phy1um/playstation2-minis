@@ -1,3 +1,4 @@
+
 local D2D = require("draw2d")
 local VRAM = require("vram")
 local game = require("game")
@@ -33,7 +34,7 @@ function updatePadState(st)
 end
 
 function PS2PROG.start()
-  PS2PROG.logLevel(LOG.infoLevel)
+  PS2PROG.logLevel(LOG.debugLevel)
 
   T.font = D2D.loadTexture("host:bigfont.tga")
 
@@ -53,7 +54,7 @@ function PS2PROG.start()
 
 
   local vr = VRAM.slice(VRAM.mem.head)
-  vr:texture(T.font)
+  A:loadFont("bigfont.tga", 8, 16)
   A:loadTex(vr)
    
   state:enter()

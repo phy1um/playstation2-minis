@@ -1,5 +1,5 @@
 
-ENGINE_HASH=73487f675db89a0e5636bfe3d23602365d834301
+ENGINE_HASH=97f9e28988c7db304b27210f126e610b553ae461
 DOIN=$(cd engine && make )
 
 .PHONY: get-engine
@@ -25,7 +25,7 @@ clean:
 	make -C engine clean
 
 .PHONY: runps2
-runps2: scripts
+runps2: scripts assets
 	make -C engine runps2
 
 .PHONY: resetps2
@@ -35,6 +35,7 @@ resetps2:
 .PHONY: scripts
 scripts:
 	cp -r script/* engine/script/
+	make -C engine scripts
 
 .PHONY: assets
 assets:
