@@ -2,7 +2,7 @@ local M = require("ps2math")
 local D2D = require("draw2d")
 local playerBullet = require("entity.playerbullet")
 local entity = require("entity.entity")
-local AABB = require("aabb")
+local COL = require "col"
 local A = require "assets"
 
 local PX = 30
@@ -60,7 +60,7 @@ function player:draw()
 end
 
 function player.new(x, y)
-  local a = AABB.new(x, y, 15, 15)
+  local a = COL.new(x, y, 21.21)
   return setmetatable({pos = M.vec2(x, y), aabb=a}, {__index = player})
 end
 
@@ -97,7 +97,7 @@ function player:update(dt, st)
 end
 
 function player:collide(aabb)
-  if aabb.kind == "playerdamage" and aabb:testAABB(self.aabb) then
+  if aabb.kind == "playerdamage" and aabb:testOther(self.aabb) then
     LOG.info("player ow")
   end
 end

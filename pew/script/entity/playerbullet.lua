@@ -1,13 +1,14 @@
 local M = require("ps2math")
 local D2D = require("draw2d")
-local AABB = require("aabb")
 local entity = require("entity.entity")
+local COL = require "col"
 
 local playerBullet = entity.define({
   pos = M.vec2(0,0),
   speed = 200,
   width = 2,
   height = 2,
+  r = 1.4,
   angle = 0,
   colour = {1,1,0},
   alive = true,
@@ -15,7 +16,7 @@ local playerBullet = entity.define({
 })
 
 function playerBullet:onSpawn(st)
-  self.aabb = AABB.new(self.pos.x, self.pos.y, self.width, self.height)
+  self.aabb = COL.new(self.pos.x, self.pos.y, self.r)
   self.aabb.kind = "enemydamage"
   self.aabb.signal = function(s)
     if s == "kill" then self.alive = false end 

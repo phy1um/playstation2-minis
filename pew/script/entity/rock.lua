@@ -2,8 +2,9 @@
 local D2D = require("draw2d")
 local M = require("ps2math")
 local entity = require("entity.entity")
-local AABB = require("aabb")
+local COL = require "col"
 local A = require "assets"
+local PP = require"prim"
 
 local CX = 320
 local CY = 224
@@ -29,7 +30,7 @@ function rock.new(x, y)
   local out = setmetatable({
     pos = M.vec2(x, y),
     dir = dc,
-    aabb = AABB.new(x, y, 20, 20)
+    aabb = COL.new(x, y, 12)
   }, {__index = rock})
   out.aabb.kind = "playerdamage"
   return out
@@ -58,10 +59,10 @@ end
 function rock:draw()
   self.transform[0] = math.cos(self.theta) 
   self.transform[1] = -1 * math.sin(self.theta) 
-  self.transform[2] = self.pos.x + 7.5
+  self.transform[2] = self.pos.x
   self.transform[3] = math.sin(self.theta) 
   self.transform[4] = math.cos(self.theta) 
-  self.transform[5] = self.pos.y + 7.5
+  self.transform[5] = self.pos.y 
 
   local p1 = M.vec3(-15, -15, 1)
   local p2 = M.vec3(-15, 15, 1)
@@ -83,10 +84,13 @@ function rock:draw()
     p4.x, p4.y, A.rockST[2], A.rockST[3],
     p1.x, p1.y, A.rockST[1], A.rockST[3])
 
+  D2D:setColour(0xff, 0, 0, 0x20)
+  PP.circle(self.aabb.pos.x, self.aabb.pos.y, self.aabb.r)
+
 end
 
 function rock:collide(aabb)
-  if aabb.kind == "enemydamage" and aabb:testAABB(self.aabb) then
+  if aabb.kind == "enemydamage" and aabb:testOther(self.aabb) then
     LOG.info("OW")
     self.kill = true
     aabb.signal("kill")

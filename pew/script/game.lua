@@ -57,11 +57,12 @@ end
 
 function game:spawn(e)
   self.entities:push(e, 1)
-  LOG.debug("spawn " .. e.name .. " @ " .. tostring(e.pos))
+  LOG.debug("spawn " .. e.name .. " @ " .. tostring(e.pos) .. " COL: " .. tostring(e.aabb))
   e:onSpawn(self)
 end
 
 function game:addArea(b)
+  LOG.debug("adding col area " .. tostring(b))
   self.aabbs:push(b, 1)
 end
 
@@ -109,7 +110,7 @@ function game:update(dt)
     if aabb.active == false then
       self.aabbs:setState(i, 0)
     else
-      self.entities:each(function(e)
+      self.entities:each(function(e, zzz, j)
         e:collide(aabb)
       end)
     end
