@@ -4,6 +4,7 @@ local playerBullet = require("entity.playerbullet")
 local entity = require("entity.entity")
 local COL = require "col"
 local A = require "assets"
+local PP = require"prim"
 
 local PX = 30
 
@@ -19,7 +20,12 @@ local player = entity.define({
   transform = M.mat3(),
   wrap = true,
   name = "PLAYER",
+  health = 5,
+  itimer = 0,
+  alive = true,
 })
+
+function player:onDeath() end
 
 function player:draw()
   D2D:setColour(0x60, 0x60, 0x60, 0x80)
@@ -57,14 +63,17 @@ function player:draw()
   m:rotate(self.theta)
   m:add(self.pos)
   D2D:rect(m.x - 3, m.y - 3, 6, 6)
+  PP.circle(self.aabb.pos.x, self.aabb.pos.y, self.aabb.r)
 end
 
 function player.new(x, y)
-  local a = COL.new(x, y, 21.21)
+  local a = COL.new(x, y, 5)
   return setmetatable({pos = M.vec2(x, y), aabb=a}, {__index = player})
 end
 
 function player:update(dt, st)
+  self.itimer = self.itimer - dt
+  self.aabb.pos:copy(self.pos)
   self.bulletTimer = self.bulletTimer - dt
   local rx = PAD.axis(PAD.axisRightX)
   local ry = PAD.axis(PAD.axisRightY)
@@ -94,11 +103,19 @@ function player:update(dt, st)
     st:spawn(bullet)
     self.spawnBullet = false
   end
+
+  return self.alive
 end
 
 function player:collide(aabb)
   if aabb.kind == "playerdamage" and aabb:testOther(self.aabb) then
-    LOG.info("player ow")
+    if self.itimer <= 0 then
+      self.health = self.health - 1
+      self.itimer = 1
+      if self.health <= 0 then
+        self:onDeath()
+      end
+    end
   end
 end
 

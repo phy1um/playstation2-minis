@@ -2,6 +2,7 @@
 local D2D = require("draw2d")
 local State = require("state")
 local SL = require("slotlist")
+local PP = require"prim"
 
 local player = require("entity.player")
 local rock = require("entity.rock")
@@ -47,12 +48,12 @@ function game:decorate()
 end
 
 function game:enter()
-  local p = player.new(30, 40)
-  self.player = p
-  self:spawn(p)
+  local mgr = gameManager.new()
+  self.player = mgr:makePlayer(30, 40)
+  self:spawn(self.player)
   self:decorate()
   self.bgstars = stars.new(-20, -20, 660, 500, 100)
-  self:spawn(gameManager.new())
+  self:spawn(mgr)
 end
 
 function game:spawn(e)
@@ -84,7 +85,7 @@ function game:draw()
 
   self.aabbs:each(function(a)
     D2D:setColour(0xff, 0, 0, 0x20)
-    D2D:rect(a.pos.x, a.pos.y, a.bound.x, a.bound.y)
+    PP.circle(a.pos.x, a.pos.y, a.r)
   end)
 end
 

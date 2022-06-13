@@ -1,6 +1,7 @@
 local M = require("ps2math")
 local rock = require("entity.rock")
 local entity = require("entity.entity")
+local player = require"entity.player"
 local A = require("assets")
 local D2D = require("draw2d")
 
@@ -18,15 +19,30 @@ local mgr = entity.define({
   lastDir = 0,
   name = "GAMEMGR",
   score = 0,
+  gameOver = false,
+  gameOverTimer = 3,
 })
 
 function mgr.new()
   return setmetatable({}, {__index = mgr})
 end
 
+function mgr:makePlayer(x, y)
+  local out = player.new(x, y)
+  out.onDeath = function()
+    LOG.debug("GAME OVER")
+    out.alive = false
+    self.gameOver = true
+  end
+  self.getHealth = function() 
+    return out.health
+  end
+  return out
+end
+
 function mgr:makeRock(x, y)
   local out = rock.new(x, y)
-  rock.cb = function()
+  out.cb = function()
     self.score = self.score + 100
     self.rockSpawnedCount = self.rockSpawnedCount - 1
   end
@@ -34,6 +50,10 @@ function mgr:makeRock(x, y)
 end
 
 function mgr:update(dt, state)
+  if self.gameOver == true then
+    self.gameOverTimer = self.gameOverTimer - dt
+    return
+  end
   self.nextRock = self.nextRock - dt
   if self.nextRock < 0 and self.rockSpawnedCount < self.rockSpawnMax then
     self.nextRock = self.nextRockDelay
@@ -65,6 +85,10 @@ function mgr:draw()
   D2D:setColour(0x80, 0x80, 0x80, 0x80)
   --T.printLines(10, 10, "Score: " .. self.score)
   A.font:printLines(10, 10, "Score: " .. string.format("%06s", self.score))
+  A.font:printLines(200, 10, "Health: " .. self.getHealth())
+  if self.gameOver == true and self.gameOverTimer < 0 then
+    A.font:centerPrint(0, 200, 640, "GAME OVER") 
+  end
 end
 
 

@@ -4,7 +4,6 @@ local M = require("ps2math")
 local entity = require("entity.entity")
 local COL = require "col"
 local A = require "assets"
-local PP = require"prim"
 
 local CX = 320
 local CY = 224
@@ -84,8 +83,6 @@ function rock:draw()
     p4.x, p4.y, A.rockST[2], A.rockST[3],
     p1.x, p1.y, A.rockST[1], A.rockST[3])
 
-  D2D:setColour(0xff, 0, 0, 0x20)
-  PP.circle(self.aabb.pos.x, self.aabb.pos.y, self.aabb.r)
 
 end
 
