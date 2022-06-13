@@ -34,6 +34,13 @@ function text:printLines(x, y, ...)
   end
 end
 
+function text:centerPrint(x, y, width, str)
+  local strWidth = string.len(str) * self.charWidth
+  local sx = math.floor((width - strWidth) / 2)
+  self:drawString(str, x + sx, y)
+end
+
+
 function text.new(texture, charWidth, charHeight)
   return setmetatable({
     texture = texture,
