@@ -14,7 +14,7 @@ local a = {
 }
 
 function a:loadTex(vr)
-  self.sprites = D2D.loadTexture("sprites.tga")
+  self.sprites = D2D.loadTexture(PS2_SCRIPT_PATH .. "sprites.tga")
   vr:texture(self.sprites)
   vr:texture(self.fontTex)
 end

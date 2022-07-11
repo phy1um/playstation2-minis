@@ -36,7 +36,7 @@ end
 function PS2PROG.start()
   PS2PROG.logLevel(LOG.debugLevel)
 
-  T.font = D2D.loadTexture("host:bigfont.tga")
+  T.font = D2D.loadTexture(PS2_SCRIPT_PATH .. "bigfont.tga")
 
   DMA.init(DMA.GIF)
   GS.setOutput(640, 448, GS.INTERLACED, GS.NTSC) 
